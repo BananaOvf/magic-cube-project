@@ -1,0 +1,16 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/src/">
+    <Project Path="src/MagicCube.Core/MagicCube.Core.csproj" />
+    <Project Path="src/MagicCube.Infrastructure/MagicCube.Infrastructure.csproj" />
+    <Project Path="src/MagicCube.Services/MagicCube.Services.csproj" />
+    <Project Path="src/MagicCube.UI/MagicCube.UI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MagicCube.Core.Tests/MagicCube.Core.Tests.csproj" Id="b87080ee-4681-43a4-a2bc-0206d237253a" />
+  </Folder>
+</Solution>

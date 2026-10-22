@@ -1,0 +1,32 @@
+Keyboard Controls:
+  R, U, F, D, L, B — clockwise face turn
+  + Shift — counter-clockwise
+  + Ctrl — wide move (face + middle slice)
+  + Ctrl+Shift — wide move counter-clockwise
+  M, E, S — middle slice turn (hold Shift for reverse)
+  x, y, z — whole cube rotation (hold Shift for reverse)
+  ← (Undo) / → (Redo) — navigate move history
+
+Spacebar — Timer:
+  • Hold Spacebar for ~1 second (a progress bar will appear), then release to start the timer
+  • Press Spacebar again to stop the timer and save the solve
+
+Mouse:
+  • Hold left-click and drag to rotate the camera
+  • Scroll wheel to zoom in/out
+
+Menu:
+  View → Compressed history — compact display of the move sequence
+  View → Splash screen at startup — show the splash screen on launch
+  Commands → Reset — solve the cube (return to initial state)
+  Commands → Scramble — generate a random 20-move scramble
+  Commands → Reset camera — return the camera to its default position
+  Commands → Solve → [solver name] — auto-solve using the selected algorithm
+  Export → Excel — save the solve list to an .xlsx file
+
+Left Panel:
+  • List of all solves with time, scramble, and solution (hover for details)
+  • ✕ button — delete the selected solve
+  • "Animation Speed" slider — adjusts the turn speed (0.1x – 50.0x)
+
+The current move indicator highlights the active operation; a "Stop" button appears when a solver is running.

@@ -1,0 +1,223 @@
+﻿<Window x:Class="MagicCube.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Magic Cube Simulator" Height="700" Width="1000"
+        WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/MainWindowResources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="R" Command="{Binding ExecuteNotationCommand}" CommandParameter="R"/>
+        <KeyBinding Key="R" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="R'"/>
+        <KeyBinding Key="R" Modifiers="Control" Command="{Binding ExecuteNotationCommand}" CommandParameter="r"/>
+        <KeyBinding Key="R" Modifiers="Control+Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="r'"/>
+        <KeyBinding Key="U" Command="{Binding ExecuteNotationCommand}" CommandParameter="U"/>
+        <KeyBinding Key="U" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="U'"/>
+        <KeyBinding Key="U" Modifiers="Control" Command="{Binding ExecuteNotationCommand}" CommandParameter="u"/>
+        <KeyBinding Key="U" Modifiers="Control+Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="u'"/>
+        <KeyBinding Key="F" Command="{Binding ExecuteNotationCommand}" CommandParameter="F"/>
+        <KeyBinding Key="F" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="F'"/>
+        <KeyBinding Key="F" Modifiers="Control" Command="{Binding ExecuteNotationCommand}" CommandParameter="f"/>
+        <KeyBinding Key="F" Modifiers="Control+Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="f'"/>
+        <KeyBinding Key="D" Command="{Binding ExecuteNotationCommand}" CommandParameter="D"/>
+        <KeyBinding Key="D" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="D'"/>
+        <KeyBinding Key="D" Modifiers="Control" Command="{Binding ExecuteNotationCommand}" CommandParameter="d"/>
+        <KeyBinding Key="D" Modifiers="Control+Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="d'"/>
+        <KeyBinding Key="L" Command="{Binding ExecuteNotationCommand}" CommandParameter="L"/>
+        <KeyBinding Key="L" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="L'"/>
+        <KeyBinding Key="L" Modifiers="Control" Command="{Binding ExecuteNotationCommand}" CommandParameter="l"/>
+        <KeyBinding Key="L" Modifiers="Control+Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="l'"/>
+        <KeyBinding Key="B" Command="{Binding ExecuteNotationCommand}" CommandParameter="B"/>
+        <KeyBinding Key="B" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="B'"/>
+        <KeyBinding Key="B" Modifiers="Control" Command="{Binding ExecuteNotationCommand}" CommandParameter="b"/>
+        <KeyBinding Key="B" Modifiers="Control+Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="b'"/>
+
+        <KeyBinding Key="M" Command="{Binding ExecuteNotationCommand}" CommandParameter="M"/>
+        <KeyBinding Key="M" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="M'"/>
+        <KeyBinding Key="E" Command="{Binding ExecuteNotationCommand}" CommandParameter="E"/>
+        <KeyBinding Key="E" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="E'"/>
+        <KeyBinding Key="S" Command="{Binding ExecuteNotationCommand}" CommandParameter="S"/>
+        <KeyBinding Key="S" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="S'"/>
+
+        <KeyBinding Key="X" Command="{Binding ExecuteNotationCommand}" CommandParameter="x"/>
+        <KeyBinding Key="X" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="x'"/>
+        <KeyBinding Key="Y" Command="{Binding ExecuteNotationCommand}" CommandParameter="y"/>
+        <KeyBinding Key="Y" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="y'"/>
+        <KeyBinding Key="Z" Command="{Binding ExecuteNotationCommand}" CommandParameter="z"/>
+        <KeyBinding Key="Z" Modifiers="Shift" Command="{Binding ExecuteNotationCommand}" CommandParameter="z'"/>
+
+        <KeyBinding Key="Left" Command="{Binding UndoCommand}"/>
+        <KeyBinding Key="Right" Command="{Binding RedoCommand}"/>
+    </Window.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Menu Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0">
+            <MenuItem Header="{DynamicResource Menu_View}" d:Header="View">
+                <MenuItem Header="{DynamicResource Menu_CompressedHistory}" IsCheckable="True" IsChecked="{Binding IsCompressedView}" />
+                <MenuItem Header="{DynamicResource Menu_SplashScreenAtStartup}"  IsCheckable="True" IsChecked="{Binding ShowSplashScreenSetting}" />
+                <MenuItem Header="{DynamicResource Menu_Language}">
+                    <MenuItem Header="English" 
+                  IsCheckable="True" 
+                  IsChecked="{Binding IsEnglishSelected}"
+                  Command="{Binding SetLanguageCommand}" 
+                  CommandParameter="en" />
+                    <MenuItem Header="Русский" 
+                  IsCheckable="True" 
+                  IsChecked="{Binding IsRussianSelected}"
+                  Command="{Binding SetLanguageCommand}" 
+                  CommandParameter="ru" />
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource Menu_Commands}" d:Header="Commands">
+                <MenuItem Header="{DynamicResource Menu_Reset}" Command="{Binding ResetCubeCommand}"/>
+                <MenuItem Header="{DynamicResource Menu_Scramble}" Command="{Binding ScrambleCommand}"/>
+                <MenuItem Header="{DynamicResource Menu_ResetCamera}" Command="{Binding ResetCameraCommand}"/>
+                <MenuItem Header="{DynamicResource Menu_Solve}" ItemsSource="{Binding Solvers}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Name}"/>
+                            <Setter Property="Command" 
+                        Value="{Binding DataContext.SolveWithSolverCommand, 
+                                RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource Menu_Export}" d:Header="Export">
+                <MenuItem Header="Excel" Command="{Binding ExportSolvesCommand}"/>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource Menu_Help}" d:Header="Help" Command="{Binding ShowHelpCommand}" />
+            <MenuItem Header="{DynamicResource Menu_About}" d:Header="About" Command="{Binding ShowAboutCommand}"/>
+        </Menu>
+
+        <Border Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" 
+        BorderBrush="Gray" BorderThickness="1" Margin="4" Padding="4">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <ListBox Grid.Row="0" ItemsSource="{Binding Solves}" Margin="0,0,0,8">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid HorizontalAlignment="Stretch">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock FontSize="18" Text="{Binding Duration, StringFormat='{}{0:hh\\:mm\\:ss\\.fff}'}" 
+                                   VerticalAlignment="Center" Margin="4,0">
+                                    <TextBlock.ToolTip>
+                                        <StackPanel>
+                                            <TextBlock FontWeight="Bold">
+                                                <Run Text="{DynamicResource Label_Scramble}"/>
+                                                <Run Text="{Binding Scramble}"/>
+                                            </TextBlock>
+                                            <TextBlock>
+                                                <Run Text="{DynamicResource Label_Solution}"/>
+                                                <Run Text="{Binding Solution}"/>
+                                            </TextBlock>
+                                            <TextBlock>
+                                                <Run Text="{DynamicResource Label_Date}"/>
+                                                <Run Text="{Binding Timestamp, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}"/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </TextBlock.ToolTip>
+                                </TextBlock>
+                                <Button FontSize="14" Grid.Column="1" Content="✕" HorizontalAlignment="Right"
+                                Command="{Binding DataContext.DeleteSolveCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
+                                CommandParameter="{Binding Id}"
+                                Width="20" Height="20" Margin="0,0,4,0"
+                                Background="Transparent" BorderThickness="0" Foreground="Red"
+                                FontWeight="Bold" Cursor="Hand"
+                                ToolTip="{DynamicResource ToolTip_ClearSolve}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel Grid.Row="1" Margin="0,4,0,0">
+                    <TextBlock Text="{DynamicResource Settings_AnimationSpeed}" d:Text="Animation speed" Margin="0,0,0,4"/>
+                    <Slider Minimum="0.1" Maximum="50.0" TickFrequency="0.1" Focusable="False"
+                            IsSnapToTickEnabled="True" Value="{Binding AnimationTimeScale, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBlock HorizontalAlignment="Center" Text="{Binding AnimationTimeScale, StringFormat={}{0:F2}x}"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid x:Name="HistoryViewport"
+                  Grid.Row="0"
+                  Height="60"
+                  ClipToBounds="True">
+                <Canvas x:Name="HistoryCanvas"/>
+                <Rectangle HorizontalAlignment="Left"
+                           Width="400"
+                           Fill="{StaticResource FadeLeft}"
+                           IsHitTestVisible="False"
+                           Panel.ZIndex="1"/>
+                <Rectangle HorizontalAlignment="Right"
+                           Width="400"
+                           Fill="{StaticResource FadeRight}"
+                           IsHitTestVisible="False"
+                           Panel.ZIndex="1"/>
+                <Button Content="{DynamicResource Btn_Stop}" d:Content="Stop"
+                        Style="{StaticResource StopButtonStyle}"
+                        Command="{Binding StopSolvingCommand}"
+                        Visibility="{Binding IsApplyingSolve, Converter={StaticResource BoolToVisibilityConverter}}"
+                        HorizontalAlignment="Right" VerticalAlignment="Top"
+                        Panel.ZIndex="10"/>
+            </Grid>
+
+            <Viewport3D x:Name="CubeViewport" ClipToBounds="True" Grid.Row="1"/>
+
+            <StackPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,10">
+                <TextBlock Text="{Binding ScrambleText}"
+                           d:Text="scramble string"
+                           FontSize="20" TextWrapping="Wrap" 
+                           HorizontalAlignment="Center" TextAlignment="Center"/>
+                <ProgressBar Height="4"
+                             Opacity="{Binding HoldIndicatorOpacity}"
+                             Minimum="0" Maximum="100"
+                             Value="{Binding HoldProgress}"
+                             Foreground="Lime" Background="Transparent" 
+                             Margin="0,4"/>
+                <TextBlock Text="{Binding ElapsedTime, StringFormat='hh\\:mm\\:ss\\.fff'}" 
+                           FontSize="32" FontWeight="Bold" 
+                           HorizontalAlignment="Center" Margin="0,8,0,0"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

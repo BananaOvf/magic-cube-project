@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <sys:String x:Key="Menu_View">View</sys:String>
+    <sys:String x:Key="Menu_Commands">Commands</sys:String>
+    <sys:String x:Key="Menu_Export">Export</sys:String>
+    <sys:String x:Key="Menu_Help">Help</sys:String>
+    <sys:String x:Key="Menu_About">About</sys:String>
+
+    <sys:String x:Key="Menu_Reset">Reset</sys:String>
+    <sys:String x:Key="Menu_Scramble">Scramble</sys:String>
+    <sys:String x:Key="Menu_Solve">Solve</sys:String>
+    <sys:String x:Key="Menu_CompressedHistory">Compressed history</sys:String>
+    <sys:String x:Key="Menu_SplashScreenAtStartup">Splash screen at startup</sys:String>
+    <sys:String x:Key="Menu_ResetCamera">Reset the camera</sys:String>
+    <sys:String x:Key="Menu_Language">Language</sys:String>
+
+    <sys:String x:Key="Btn_Stop">Stop</sys:String>
+    <sys:String x:Key="Status_Ready">Ready</sys:String>
+    <sys:String x:Key="Status_NoMoves">No moves</sys:String>
+
+    <sys:String x:Key="Settings_AnimationSpeed">Animation speed</sys:String>
+
+    <sys:String x:Key="Label_Scramble">Scramble:</sys:String>
+    <sys:String x:Key="Label_Solution">Solution:</sys:String>
+    <sys:String x:Key="Label_Date">Date:</sys:String>
+
+    <sys:String x:Key="ToolTip_ClearSolve">Clear a solve</sys:String>
+
+    <sys:String x:Key="Dialog_DeleteSolve_Title">Confirm Deletion</sys:String>
+    <sys:String x:Key="Dialog_DeleteSolve_Message">Are you sure you want to delete this solve?</sys:String>
+</ResourceDictionary>

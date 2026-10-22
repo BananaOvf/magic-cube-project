@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+    
+    <sys:String x:Key="Menu_View">Вид</sys:String>
+    <sys:String x:Key="Menu_Commands">Команды</sys:String>
+    <sys:String x:Key="Menu_Export">Экспорт</sys:String>
+    <sys:String x:Key="Menu_Help">Помощь</sys:String>
+    <sys:String x:Key="Menu_About">О программе</sys:String>
+    
+    <sys:String x:Key="Menu_Reset">Сброс</sys:String>
+    <sys:String x:Key="Menu_Scramble">Запутать</sys:String>
+    <sys:String x:Key="Menu_Solve">Собрать</sys:String>
+    <sys:String x:Key="Menu_CompressedHistory">Сжатая история</sys:String>
+    <sys:String x:Key="Menu_SplashScreenAtStartup">Сплеш-скрин при старте</sys:String>
+    <sys:String x:Key="Menu_ResetCamera">Сброс камеры</sys:String>
+    <sys:String x:Key="Menu_Language">Язык</sys:String>
+
+    <sys:String x:Key="Btn_Stop">Стоп</sys:String>
+    <sys:String x:Key="Status_Ready">Готов к работе</sys:String>
+    <sys:String x:Key="Status_NoMoves">Нет ходов</sys:String>
+
+    <sys:String x:Key="Settings_AnimationSpeed">Скорость анимации</sys:String>
+
+    <sys:String x:Key="Label_Scramble">Скрамбл:</sys:String>
+    <sys:String x:Key="Label_Solution">Решение:</sys:String>
+    <sys:String x:Key="Label_Date">Дата:</sys:String>
+    
+    <sys:String x:Key="ToolTip_ClearSolve">Удалить сборку</sys:String>
+
+    <sys:String x:Key="Dialog_DeleteSolve_Title">Подтверждение удаления</sys:String>
+    <sys:String x:Key="Dialog_DeleteSolve_Message">Вы действительно хотите удалить эту сборку?</sys:String>
+</ResourceDictionary>

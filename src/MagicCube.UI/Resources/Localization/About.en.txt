@@ -1,0 +1,15 @@
+Magic Cube Simulator (v1.0.0)
+
+Key Features:
+  • Face and slice rotations (including wide moves and whole cube rotations)
+  • Interactive camera control (mouse drag to rotate, wheel to zoom)
+  • Standard scramble generation (no consecutive moves on the same axis)
+  • Two built-in solvers: Kociemba (Two-Phase) and CFOP
+  • Save/Load current state (position + move history)
+  • Solve timer with Spacebar hold; auto-saving of results
+  • View, delete, and export solves to Excel
+  • Animation speed control (0.1x – 50.0x), compact history view, splash screen
+
+Technologies: C#, .NET, WPF, MVVM (CommunityToolkit.Mvvm), ClosedXML, Kociemba Two-Phase Algorithm.
+
+Copyright (C) 2026 Magic Cube Project. Licensed under GPLv3.

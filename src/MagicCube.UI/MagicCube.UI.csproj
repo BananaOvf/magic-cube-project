@@ -1,0 +1,59 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <ApplicationIcon>Resources\magic-cube.ico</ApplicationIcon>
+    <Product>Magic Cube Simulator</Product>
+    <Company>Magic Cube Project</Company>
+    <Copyright>Copyright © 2026 Magic Cube Project</Copyright>
+	<AssemblyTitle>Magic Cube Simulator</AssemblyTitle>
+
+	<Version>1.0.0</Version>
+	<AssemblyVersion>1.0.0.0</AssemblyVersion>
+	<FileVersion>1.0.0.0</FileVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Localization\About.en.txt" />
+    <None Remove="Resources\Localization\About.ru.txt" />
+    <None Remove="Resources\Localization\Help.en.txt" />
+    <None Remove="Resources\Localization\Help.ru.txt" />
+    <None Remove="Resources\magic-cube.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\Localization\About.en.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Localization\About.ru.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Localization\Help.en.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Localization\Help.ru.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\magic-cube.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MagicCube.Core\MagicCube.Core.csproj" />
+    <ProjectReference Include="..\MagicCube.Infrastructure\MagicCube.Infrastructure.csproj" />
+    <ProjectReference Include="..\MagicCube.Services\MagicCube.Services.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\magic-cube.png" />
+  </ItemGroup>
+
+</Project>
