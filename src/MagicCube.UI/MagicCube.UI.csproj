@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <ApplicationIcon>Resources\magic-cube.ico</ApplicationIcon>
     <Product>Magic Cube Simulator</Product>
     <Company>Magic Cube Project</Company>
