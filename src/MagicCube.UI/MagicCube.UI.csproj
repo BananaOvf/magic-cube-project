@@ -12,6 +12,7 @@
     <Company>Magic Cube Project</Company>
     <Copyright>Copyright © 2026 Magic Cube Project</Copyright>
 	<AssemblyTitle>Magic Cube Simulator</AssemblyTitle>
+	<AssemblyName>MagicCubeSimulator</AssemblyName>
 
 	<Version>1.0.0</Version>
 	<AssemblyVersion>1.0.0.0</AssemblyVersion>
@@ -24,6 +25,11 @@
     <None Remove="Resources\Localization\Help.en.txt" />
     <None Remove="Resources\Localization\Help.ru.txt" />
     <None Remove="Resources\magic-cube.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Resources\Localization\Strings.en.xaml" />
+    <Page Remove="Resources\Localization\Strings.ru.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -54,6 +60,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Localization\Strings.en.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
+    <Resource Include="Resources\Localization\Strings.ru.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Resource>
     <Resource Include="Resources\magic-cube.png" />
   </ItemGroup>
 

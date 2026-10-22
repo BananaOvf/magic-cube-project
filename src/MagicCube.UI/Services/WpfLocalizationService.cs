@@ -54,7 +54,7 @@ namespace MagicCube.UI.Services
 
             var dict = new ResourceDictionary
             {
-                Source = new Uri($"pack://application:,,,/MagicCube.UI;component/Resources/Localization/Strings.{languageCode}.xaml")
+                Source = new Uri($"pack://application:,,,/MagicCubeSimulator;component/Resources/Localization/Strings.{languageCode}.xaml")
             };
 
             var appResources = Application.Current.Resources.MergedDictionaries;
