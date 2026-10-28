@@ -7,6 +7,6 @@ namespace MagicCube.Core.Core
 {
     public class CubeStateFactory : ICubeStateFactory
     {
-        public IMutableCubeState Create() => new CubeStateOptimized();
+        public IMutableCubeState Create() => new CubeState();
     }
 }

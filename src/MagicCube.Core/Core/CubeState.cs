@@ -48,11 +48,16 @@ namespace MagicCube.Core.Core
                 foreach (var corner in _corners)
                     if (corner.Key != corner.Value.Id || corner.Value.Orientation != CornerOrientation.Default)
                         return false;
+                foreach (var center in _centers)
+                    if (center.Key != center.Value.Id || center.Value.Orientation != CenterOrientation.Default)
+                        return false;
                 return true;
             }
         }
 
         public CubeState() => Reset();
+
+        private CubeState(bool skipReset) { if (!skipReset) Reset(); }
 
         public void LoadFromHistory(IReadOnlyList<Move> history, int currentIndex)
         {
@@ -108,7 +113,6 @@ namespace MagicCube.Core.Core
             _current = -1;
         }
 
-        // ---------- Facelet String ----------
         public string ToFaceletString()
         {
             var sb = new StringBuilder(54);
@@ -134,21 +138,24 @@ namespace MagicCube.Core.Core
                     yield return (r, c);
         }
 
+        private Face GetCenterFace(CenterId position) =>
+            _centers[position].Id switch
+            {
+                CenterId.U => Face.U,
+                CenterId.D => Face.D,
+                CenterId.L => Face.L,
+                CenterId.R => Face.R,
+                CenterId.F => Face.F,
+                CenterId.B => Face.B,
+                _ => throw new InvalidOperationException()
+            };
+
         private char GetFaceletColor(Face face, (int row, int col) pos)
         {
             var (elementId, stickerIndex) = GetElementAtFacelet(face, pos);
             return elementId switch
             {
-                CenterId centerId => FaceToChar(_centers[centerId].Id switch
-                {
-                    CenterId.U => Face.U,
-                    CenterId.D => Face.D,
-                    CenterId.L => Face.L,
-                    CenterId.R => Face.R,
-                    CenterId.F => Face.F,
-                    CenterId.B => Face.B,
-                    _ => throw new InvalidOperationException()
-                }),
+                CenterId centerId => FaceToChar(GetCenterFace(centerId)),
                 EdgeId edgeId => FaceToChar(GetEdgeFaceColor(_edges[edgeId], stickerIndex)),
                 CornerId cornerId => FaceToChar(GetCornerFaceColor(_corners[cornerId], stickerIndex)),
                 _ => '?'
@@ -242,7 +249,6 @@ namespace MagicCube.Core.Core
             };
         }
 
-        // Determining the color of the edge sticker by index (0 or 1) taking into account the orientation
         private static Face GetEdgeFaceColor(EdgePiece edge, int stickerIndex)
         {
             // In the assembled state, the edge ID contains two face letters (e.g., UR -> U and R)
@@ -256,22 +262,9 @@ namespace MagicCube.Core.Core
                 : (stickerIndex == 0 ? face1 : face0);
         }
 
-        // Determining the color of the corner sticker by index (0,1,2) taking into account the orientation
         private static Face GetCornerFaceColor(CornerPiece corner, int stickerIndex)
         {
-            var id = corner.Id;
-            var faces = id switch
-            {
-                CornerId.URF => new[] { Face.U, Face.R, Face.F },
-                CornerId.UFL => new[] { Face.U, Face.F, Face.L },
-                CornerId.ULB => new[] { Face.U, Face.L, Face.B },
-                CornerId.UBR => new[] { Face.U, Face.B, Face.R },
-                CornerId.DFR => new[] { Face.D, Face.F, Face.R },
-                CornerId.DLF => new[] { Face.D, Face.L, Face.F },
-                CornerId.DBL => new[] { Face.D, Face.B, Face.L },
-                CornerId.DRB => new[] { Face.D, Face.R, Face.B },
-                _ => throw new ArgumentException()
-            };
+            var faces = GetCornerBaseFaces(corner.Id);
 
             return corner.Orientation switch
             {
@@ -282,9 +275,22 @@ namespace MagicCube.Core.Core
             };
         }
 
+        private static Face[] GetCornerBaseFaces(CornerId id) => id switch
+        {
+            CornerId.URF => new[] { Face.U, Face.R, Face.F },
+            CornerId.UFL => new[] { Face.U, Face.F, Face.L },
+            CornerId.ULB => new[] { Face.U, Face.L, Face.B },
+            CornerId.UBR => new[] { Face.U, Face.B, Face.R },
+            CornerId.DFR => new[] { Face.D, Face.F, Face.R },
+            CornerId.DLF => new[] { Face.D, Face.L, Face.F },
+            CornerId.DBL => new[] { Face.D, Face.B, Face.L },
+            CornerId.DRB => new[] { Face.D, Face.R, Face.B },
+            _ => throw new ArgumentException()
+        };
+
         private static char FaceToChar(Face face) => face.ToString()[0];
 
-        // ---------- Application of the move ----------
+        // ---------- Apply move internal ----------
         private void ApplyMoveInternal(Move move)
         {
             switch (move)
@@ -431,7 +437,7 @@ namespace MagicCube.Core.Core
         private void TurnSliceM(int times)
         {
             var edgeCycle = new[] { EdgeId.UB, EdgeId.UF, EdgeId.DF, EdgeId.DB };
-            CycleEdges(edgeCycle, times, changeOrientation: true, slice: Slice.M);
+            CycleEdges(edgeCycle, times, changeOrientation: true);
 
             var centerCycle = new[] { CenterId.U, CenterId.F, CenterId.D, CenterId.B };
             CycleCenters(centerCycle, times);
@@ -440,7 +446,7 @@ namespace MagicCube.Core.Core
         private void TurnSliceE(int times)
         {
             var edgeCycle = new[] { EdgeId.FR, EdgeId.BR, EdgeId.BL, EdgeId.FL };
-            CycleEdges(edgeCycle, times, changeOrientation: true, slice: Slice.E);
+            CycleEdges(edgeCycle, times, changeOrientation: true);
 
             var centerCycle = new[] { CenterId.F, CenterId.R, CenterId.B, CenterId.L };
             CycleCenters(centerCycle, times);
@@ -449,7 +455,7 @@ namespace MagicCube.Core.Core
         private void TurnSliceS(int times)
         {
             var edgeCycle = new[] { EdgeId.UR, EdgeId.DR, EdgeId.DL, EdgeId.UL };
-            CycleEdges(edgeCycle, times, changeOrientation: true, slice: Slice.S);
+            CycleEdges(edgeCycle, times, changeOrientation: true);
 
             var centerCycle = new[] { CenterId.U, CenterId.R, CenterId.D, CenterId.L };
             CycleCenters(centerCycle, times);
@@ -571,9 +577,7 @@ namespace MagicCube.Core.Core
         private void CycleEdges(
             EdgeId[] cycle,
             int times,
-            bool changeOrientation = false,
-            Face face = default,
-            Slice slice = default)
+            bool changeOrientation = false)
         {
             if (cycle.Length == 0) return;
 
@@ -633,13 +637,10 @@ namespace MagicCube.Core.Core
 
         public IReadOnlyCubeState Clone()
         {
-            var clone = new CubeState();
-            foreach (var kv in _centers)
-                clone._centers[kv.Key] = kv.Value;
-            foreach (var kv in _edges)
-                clone._edges[kv.Key] = kv.Value;
-            foreach (var kv in _corners)
-                clone._corners[kv.Key] = kv.Value;
+            var clone = new CubeState(skipReset: false);
+            foreach (var kv in _centers) clone._centers[kv.Key] = kv.Value;
+            foreach (var kv in _edges) clone._edges[kv.Key] = kv.Value;
+            foreach (var kv in _corners) clone._corners[kv.Key] = kv.Value;
             clone._history.AddRange(_history);
             clone._current = _current;
             return clone;
