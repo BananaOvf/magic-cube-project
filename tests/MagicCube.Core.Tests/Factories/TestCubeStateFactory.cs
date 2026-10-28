@@ -23,6 +23,6 @@ namespace MagicCube.Core.Tests.Factories
 {
     public class TestCubeStateFactory : ICubeStateFactory
     {
-        public IMutableCubeState Create() => new CubeStateOptimized();
+        public IMutableCubeState Create() => new CubeState();
     }
 }
