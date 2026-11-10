@@ -29,9 +29,7 @@ namespace MagicCube.Infrastructure.Solvers
 {
     public class KociembaSolver : IOptimalCubeSolver
     {
-        private static readonly string TablesFolder = Path.Combine(
-            AppContext.BaseDirectory,
-            "Assets", "Kociemba", "Tables");
+        private static readonly string TablesFolder = Tools.TablesFolder;
 
         private readonly ICubeStateFactory _factory;
         private readonly ImmutableDictionary<(CenterId, CenterId), ImmutableList<RotationMove>> _orientationMap;
