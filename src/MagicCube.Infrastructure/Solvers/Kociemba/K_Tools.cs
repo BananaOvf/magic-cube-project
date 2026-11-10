@@ -23,6 +23,10 @@
         ///         -4: Not all 8 corners exist exactly once<br>
         ///         -5: Twist error: One corner has to be twisted<br>
         ///         -6: Parity error: Two corners or two edges have to be exchanged </returns>
+
+        public static readonly string TablesFolder = Path.Combine(
+            AppContext.BaseDirectory, "Assets", "Kociemba", "Tables");
+
         public static int verify(string s)
         {
             int[] count = new int[6];
@@ -76,8 +80,8 @@
 
         public static void SerializeTable(string filename, short[,] array)
         {
-            EnsureFolder("Assets\\Kociemba\\Tables\\");
-            using var s = File.Open(Path.Combine("Assets\\Kociemba\\Tables", filename), FileMode.Create);
+            Directory.CreateDirectory(TablesFolder);
+            using var s = File.Open(Path.Combine(TablesFolder, filename), FileMode.Create);
             using var bw = new BinaryWriter(s);
             int rows = array.GetLength(0);
             int cols = array.GetLength(1);
@@ -90,8 +94,8 @@
 
         public static short[,] DeserializeTable(string filename)
         {
-            EnsureFolder("Assets\\Kociemba\\Tables\\");
-            using var s = File.Open(Path.Combine("Assets\\Kociemba\\Tables", filename), FileMode.Open);
+            Directory.CreateDirectory(TablesFolder);
+            using var s = File.Open(Path.Combine(TablesFolder, filename), FileMode.Open);
             using var br = new BinaryReader(s);
             int rows = br.ReadInt32();
             int cols = br.ReadInt32();
@@ -104,8 +108,8 @@
 
         public static void SerializeSbyteArray(string filename, sbyte[] array)
         {
-            EnsureFolder("Assets\\Kociemba\\Tables\\");
-            using var s = File.Open(Path.Combine("Assets\\Kociemba\\Tables", filename), FileMode.Create);
+            Directory.CreateDirectory(TablesFolder);
+            using var s = File.Open(Path.Combine(TablesFolder, filename), FileMode.Create);
             using var bw = new BinaryWriter(s);
             bw.Write(array.Length);
             foreach (var b in array) bw.Write(b);
@@ -113,8 +117,8 @@
 
         public static sbyte[] DeserializeSbyteArray(string filename)
         {
-            EnsureFolder("Assets\\Kociemba\\Tables\\");
-            using var s = File.Open(Path.Combine("Assets\\Kociemba\\Tables", filename), FileMode.Open);
+            Directory.CreateDirectory(TablesFolder);
+            using var s = File.Open(Path.Combine(TablesFolder, filename), FileMode.Open);
             using var br = new BinaryReader(s);
             int len = br.ReadInt32();
             var arr = new sbyte[len];
