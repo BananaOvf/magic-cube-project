@@ -77,7 +77,7 @@ Here is what we are planning to build. You can help with any of these blocks:
 
 ### 🎯 Speedcubing Core (Current Focus)
 *The essential features to make this a serious training tool.*
-- [ ] **WCA Compliant Scrambles:** Standard random-state generator.
+- [x] **WCA Compliant Scrambles:** Standard random-state generator.
 - [ ] **Inspection Timer & Penalties:** 15-second countdown and support for `+2`/`DNF`.
 - [ ] **Advanced Statistics:** Implement Ao5, Ao12, and Mo3.
 
