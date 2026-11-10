@@ -3,9 +3,9 @@
 
 using MagicCube.Core.Abstractions;
 
-namespace MagicCube.Core.Core
+namespace MagicCube.Core.Core.Factories
 {
-    public class CubeStateFactory : ICubeStateFactory
+    public sealed class CubeStateFactory : ICubeStateFactory
     {
         public IMutableCubeState Create() => new CubeState();
     }

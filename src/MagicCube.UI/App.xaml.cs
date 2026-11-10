@@ -17,8 +17,7 @@
  */
 
 using MagicCube.Core.Abstractions;
-using MagicCube.Core.Core;
-using MagicCube.Core.Utils;
+using MagicCube.Core.Core.Factories;
 using MagicCube.Infrastructure.Exporters;
 using MagicCube.Infrastructure.Providers;
 using MagicCube.Infrastructure.Repositories;
