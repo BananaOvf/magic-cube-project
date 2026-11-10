@@ -41,6 +41,7 @@ namespace MagicCube.UI.ViewModels
         private readonly ISettingsService _settingsService;
         private readonly IUiSettingsService _uiSettingsService;
         private readonly IDialogService _dialogService;
+        private readonly IScrambleGenerator _scrambleGenerator;
         private readonly ILocalizationService _localization;
 
         private bool _isAnimating;
@@ -87,6 +88,7 @@ namespace MagicCube.UI.ViewModels
             IUiSettingsService uiSettingsService,
             IDialogService dialogService,
             IEnumerable<ICubeSolver> solvers,
+            IScrambleGenerator scrambleGenerator,
             ILocalizationService localization)
         {
             _cubeState = cubeState;
@@ -100,6 +102,7 @@ namespace MagicCube.UI.ViewModels
             _dialogService = dialogService;
             _solvesExporter = solvesExporter;
             _solvers = solvers.ToList();
+            _scrambleGenerator = scrambleGenerator;
             _localization = localization;
 
             IsCompressedView = _uiSettingsService.IsCompressedView;
@@ -463,7 +466,7 @@ namespace MagicCube.UI.ViewModels
             try
             {
                 _mutableCubeState.Reset();
-                var moves = ScrambleGenerator.Generate(20);
+                var moves = await _scrambleGenerator.GenerateAsync();
                 ScrambleText = MoveParser.SerializeMany(moves);
                 foreach (var m in moves) _mutableCubeState.ApplyMove(m);
                 RefreshHistory();

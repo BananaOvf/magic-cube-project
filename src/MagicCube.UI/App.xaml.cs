@@ -18,6 +18,7 @@
 
 using MagicCube.Core.Abstractions;
 using MagicCube.Core.Core;
+using MagicCube.Core.Utils;
 using MagicCube.Infrastructure.Exporters;
 using MagicCube.Infrastructure.Providers;
 using MagicCube.Infrastructure.Repositories;
@@ -129,6 +130,9 @@ namespace MagicCube.UI
             // Solvers
             services.AddSingleton<ICubeSolver, CFOPSolver>();
             services.AddSingleton<ICubeSolver, KociembaSolver>();
+
+            // Scramble generators
+            services.AddSingleton<IScrambleGenerator, RandomMoveScrambleGenerator>();
 
             // Renderers
             services.AddSingleton<I3DRenderer, PrimitiveCubeRenderer>();
