@@ -57,7 +57,15 @@ namespace MagicCube.Core.Core
 
         public CubeState() => Reset();
 
-        private CubeState(bool skipReset) { if (!skipReset) Reset(); }
+        internal CubeState(
+            IReadOnlyDictionary<CenterId, CenterPiece> centers,
+            IReadOnlyDictionary<EdgeId, EdgePiece> edges,
+            IReadOnlyDictionary<CornerId, CornerPiece> corners)
+        {
+            _centers = new Dictionary<CenterId, CenterPiece>(centers);
+            _edges = new Dictionary<EdgeId, EdgePiece>(edges);
+            _corners = new Dictionary<CornerId, CornerPiece>(corners);
+        }
 
         public void LoadFromHistory(IReadOnlyList<Move> history, int currentIndex)
         {
@@ -658,10 +666,7 @@ namespace MagicCube.Core.Core
 
         public IReadOnlyCubeState Clone()
         {
-            var clone = new CubeState(skipReset: false);
-            foreach (var kv in _centers) clone._centers[kv.Key] = kv.Value;
-            foreach (var kv in _edges) clone._edges[kv.Key] = kv.Value;
-            foreach (var kv in _corners) clone._corners[kv.Key] = kv.Value;
+            var clone = new CubeState(_centers, _edges, _corners);
             clone._history.AddRange(_history);
             clone._current = _current;
             return clone;
