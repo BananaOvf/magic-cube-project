@@ -68,6 +68,27 @@ namespace MagicCube.Core.Core
                 ApplyMoveInternal(history[i]);
         }
 
+        public void LoadFrom(IReadOnlyCubeState source)
+        {
+            ArgumentNullException.ThrowIfNull(source);
+
+            _centers.Clear();
+            foreach (CenterId id in Enum.GetValues<CenterId>())
+                _centers[id] = source.GetCenterPiece(id);
+
+            _edges.Clear();
+            foreach (EdgeId id in Enum.GetValues<EdgeId>())
+                _edges[id] = source.GetEdgePiece(id);
+
+            _corners.Clear();
+            foreach (CornerId id in Enum.GetValues<CornerId>())
+                _corners[id] = source.GetCornerPiece(id);
+
+            _history.Clear();
+            _history.AddRange(source.MoveHistory);
+            _current = source.CurrentMoveIndex;
+        }
+
         public void ApplyMove(Move move)
         {
             if (_current < _history.Count - 1)

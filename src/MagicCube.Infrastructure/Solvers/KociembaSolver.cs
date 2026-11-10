@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using DocumentFormat.OpenXml.Office2010.CustomUI;
 using Kociemba;
 using MagicCube.Core.Abstractions;
 using MagicCube.Core.Enums;
@@ -33,6 +34,7 @@ namespace MagicCube.Infrastructure.Solvers
             AppContext.BaseDirectory,
             "Assets", "Kociemba", "Tables");
 
+        private readonly ICubeStateFactory _factory;
         private readonly ImmutableDictionary<(CenterId, CenterId), ImmutableList<RotationMove>> _orientationMap;
         private readonly ImmutableDictionary<RotationMove, ImmutableDictionary<Face, Face>> _facePermutations;
 
@@ -40,6 +42,7 @@ namespace MagicCube.Infrastructure.Solvers
 
         public KociembaSolver(ICubeStateFactory factory)
         {
+            _factory = factory;
             _orientationMap = BuildOrientationMap(factory);
             _facePermutations = BuildFacePermutations(factory);
         }
@@ -48,7 +51,8 @@ namespace MagicCube.Infrastructure.Solvers
             IReadOnlyCubeState state,
             CancellationToken token = default)
         {
-            IMutableCubeState oriented = (IMutableCubeState)state.Clone();
+            IMutableCubeState oriented = _factory.Create();
+            oriented.LoadFrom(state);
 
             CenterId whitePos = FindCurrentPosition(oriented, CenterId.U);
             CenterId greenPos = FindCurrentPosition(oriented, CenterId.F);
@@ -119,11 +123,11 @@ namespace MagicCube.Infrastructure.Solvers
             map[(CenterId.U, CenterId.F)] = ImmutableList<RotationMove>.Empty;
 
             foreach (var seq in singleMoves)
-                TryAddOrientation(map, seq, solved);
+                TryAddOrientation(map, seq, factory, solved);
 
             foreach (var seq1 in singleMoves)
                 foreach (var seq2 in singleMoves)
-                    TryAddOrientation(map, seq1.AddRange(seq2), solved);
+                    TryAddOrientation(map, seq1.AddRange(seq2), factory, solved);
 
             return map.ToImmutableDictionary();
         }
@@ -131,9 +135,12 @@ namespace MagicCube.Infrastructure.Solvers
         private static void TryAddOrientation(
             Dictionary<(CenterId, CenterId), ImmutableList<RotationMove>> map,
             ImmutableList<RotationMove> moveSeq,
+            ICubeStateFactory factory,
             IReadOnlyCubeState solved)
         {
-            IMutableCubeState state = (IMutableCubeState)solved.Clone();
+            IMutableCubeState state = factory.Create();
+            state.LoadFrom(solved);
+
             foreach (var m in moveSeq) state.ApplyMove(m);
 
             CenterId white = FindCurrentPosition(state, CenterId.U);

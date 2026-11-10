@@ -12,5 +12,6 @@ namespace MagicCube.Core.Abstractions
         void Redo();
         void Reset(); // Reset to assembled state
         void LoadFromHistory(IReadOnlyList<Move> history, int currentIndex);
+        void LoadFrom(IReadOnlyCubeState source);
     }
 }
