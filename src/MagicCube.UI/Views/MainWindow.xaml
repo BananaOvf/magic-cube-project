@@ -89,7 +89,17 @@
             </MenuItem>
             <MenuItem Header="{DynamicResource Menu_Commands}" d:Header="Commands">
                 <MenuItem Header="{DynamicResource Menu_Reset}" Command="{Binding ResetCubeCommand}"/>
-                <MenuItem Header="{DynamicResource Menu_Scramble}" Command="{Binding ScrambleCommand}"/>
+                <MenuItem Header="{DynamicResource Menu_Scramble}" ItemsSource="{Binding Scramblers}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Name}"/>
+                            <Setter Property="Command"
+                    Value="{Binding DataContext.ScrambleWithScramblerCommand,
+                            RelativeSource={RelativeSource AncestorType=Window}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
                 <MenuItem Header="{DynamicResource Menu_ResetCamera}" Command="{Binding ResetCameraCommand}"/>
                 <MenuItem Header="{DynamicResource Menu_Solve}" ItemsSource="{Binding Solvers}">
                     <MenuItem.ItemContainerStyle>
