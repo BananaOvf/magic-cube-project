@@ -94,7 +94,6 @@ namespace MagicCube.UI
         {
             // Core
             services.AddSingleton<ICubeStateFactory, CubeStateFactory>();
-            services.AddSingleton<IRandomCubeStateFactory, RandomCubeStateFactory>();
             services.AddSingleton<IMutableCubeState>(sp =>
             {
                 var factory = sp.GetRequiredService<ICubeStateFactory>();
@@ -129,12 +128,10 @@ namespace MagicCube.UI
 
             // Solvers
             services.AddSingleton<ICubeSolver, CFOPSolver>();
-            services.AddSingleton<IOptimalCubeSolver, KociembaSolver>();
-            services.AddSingleton<ICubeSolver>(sp => sp.GetRequiredService<IOptimalCubeSolver>());
+            services.AddSingleton<ICubeSolver, KociembaSolver>();
 
             // Scramble generators
             services.AddSingleton<IScrambleGenerator, RandomMoveScrambleGenerator>();
-            services.AddSingleton<IScrambleGenerator, WcaScrambleGenerator>();
 
             // Renderers
             services.AddSingleton<I3DRenderer, PrimitiveCubeRenderer>();

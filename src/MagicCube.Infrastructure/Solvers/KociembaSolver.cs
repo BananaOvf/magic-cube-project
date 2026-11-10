@@ -16,6 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+using DocumentFormat.OpenXml.Office2010.CustomUI;
 using Kociemba;
 using MagicCube.Core.Abstractions;
 using MagicCube.Core.Enums;
@@ -27,7 +28,7 @@ using System.Collections.Immutable;
 
 namespace MagicCube.Infrastructure.Solvers
 {
-    public class KociembaSolver : IOptimalCubeSolver
+    public class KociembaSolver : ICubeSolver
     {
         private static readonly string TablesFolder = Path.Combine(
             AppContext.BaseDirectory,
