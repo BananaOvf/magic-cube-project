@@ -41,6 +41,7 @@ namespace MagicCube.UI.ViewModels
         private readonly ISettingsService _settingsService;
         private readonly IUiSettingsService _uiSettingsService;
         private readonly IDialogService _dialogService;
+        private readonly IScrambleGenerator _scrambleGenerator;
         private readonly ILocalizationService _localization;
 
         private bool _isAnimating;
@@ -57,7 +58,6 @@ namespace MagicCube.UI.ViewModels
         private SemaphoreSlim _executionSemaphore = new(1, 1);
 
         [ObservableProperty] private List<ICubeSolver> _solvers;
-        [ObservableProperty] private List<IScrambleGenerator> _scramblers;
 
         [ObservableProperty] private double _holdProgress;
         [ObservableProperty] private bool _isHoldIndicatorVisible;
@@ -88,7 +88,7 @@ namespace MagicCube.UI.ViewModels
             IUiSettingsService uiSettingsService,
             IDialogService dialogService,
             IEnumerable<ICubeSolver> solvers,
-            IEnumerable<IScrambleGenerator> scramblers,
+            IScrambleGenerator scrambleGenerator,
             ILocalizationService localization)
         {
             _cubeState = cubeState;
@@ -102,7 +102,7 @@ namespace MagicCube.UI.ViewModels
             _dialogService = dialogService;
             _solvesExporter = solvesExporter;
             _solvers = solvers.ToList();
-            _scramblers = scramblers.ToList();
+            _scrambleGenerator = scrambleGenerator;
             _localization = localization;
 
             IsCompressedView = _uiSettingsService.IsCompressedView;
@@ -453,49 +453,31 @@ namespace MagicCube.UI.ViewModels
         }
 
         [RelayCommand]
-        private async Task ScrambleWithScrambler(IScrambleGenerator scrambler)
+        private async Task Scramble()
         {
-            if (scrambler is null) return;
-
             CancelSolve();
-
-            _solveCts = new CancellationTokenSource();
-            var token = _solveCts.Token;
-
             CancelQueueAndAnimation();
             IsApplyingSolve = false;
 
             using var waitCts = new CancellationTokenSource(TimeSpan.FromSeconds(3));
             try { await _executionSemaphore.WaitAsync(waitCts.Token); }
-            catch (OperationCanceledException) { _solveCts?.Dispose(); _solveCts = null;  return; }
+            catch (OperationCanceledException) { return; }
 
-            bool released = false;
             try
             {
-                _queueCts?.Dispose();
-                _queueCts = new CancellationTokenSource();
-                IsApplyingSolve = true;
-
                 _mutableCubeState.Reset();
-                _executionSemaphore.Release();
-                released = true;
-
-                var moves = await scrambler.GenerateAsync(token);
-
-                _mutableCubeState.LoadFromHistory(moves, moves.Count - 1);
+                var moves = await _scrambleGenerator.GenerateAsync();
                 ScrambleText = MoveParser.SerializeMany(moves);
+                foreach (var m in moves) _mutableCubeState.ApplyMove(m);
                 RefreshHistory();
                 _stateProvider.NotifyStateChanged();
                 _renderer.UpdateStateImmediately(_cubeState);
             }
-            catch (OperationCanceledException) { }
-            catch (Exception ex) { _dialogService.ShowMessage(ex.Message, scrambler.Name); }
             finally
             {
-                IsApplyingSolve = false;
-                _solveCts?.Dispose(); _solveCts = null;
-                _queueCts?.Dispose(); _queueCts = new CancellationTokenSource();
-                if (!released) _executionSemaphore.Release();
+                _queueCts?.Dispose();
+                _queueCts = new CancellationTokenSource();
+                _executionSemaphore.Release();
             }
         }
 

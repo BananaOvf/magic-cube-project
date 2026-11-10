@@ -12,6 +12,5 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/MagicCube.Core.Tests/MagicCube.Core.Tests.csproj" Id="b87080ee-4681-43a4-a2bc-0206d237253a" />
-    <Project Path="tests/MagicCube.Services.Tests/MagicCube.Services.Tests.csproj" Id="680d756b-304f-4f26-81cc-5b0ae8d8ae28" />
   </Folder>
 </Solution>
