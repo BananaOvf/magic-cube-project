@@ -29,6 +29,7 @@ namespace MagicCube.Infrastructure.Solvers
 {
     public class CFOPSolver : ICubeSolver
     {
+        private readonly ICubeStateFactory _factory;
         private readonly ImmutableList<ImmutableList<RotationMove>> _cubeOrientations;
         private readonly ImmutableDictionary<RotationMove, ImmutableDictionary<Face, Face>> _facePermutations;
 
@@ -36,6 +37,7 @@ namespace MagicCube.Infrastructure.Solvers
 
         public CFOPSolver(ICubeStateFactory factory)
         {
+            _factory = factory;
             _facePermutations = BuildFacePermutations(factory);
             _cubeOrientations = BuildCubeOrientations();
         }
@@ -43,7 +45,8 @@ namespace MagicCube.Infrastructure.Solvers
         public async Task<IReadOnlyList<Move>> SolveAsync(
             IReadOnlyCubeState state, CancellationToken token = default)
         {
-            IMutableCubeState workState = (IMutableCubeState)state.Clone();
+            IMutableCubeState workState = _factory.Create();
+            workState.LoadFrom(state);
 
             // Orientation: white on D, green on F, red on L
             ImmutableList<RotationMove> orientationMoves = FindOrientationMoves(workState);
@@ -88,7 +91,9 @@ namespace MagicCube.Infrastructure.Solvers
         {
             foreach (var orientation in _cubeOrientations)
             {
-                IMutableCubeState clone = (IMutableCubeState)scrambled.Clone();
+                IMutableCubeState clone = _factory.Create();
+                clone.LoadFrom(scrambled);
+
                 foreach (var rot in orientation)
                     clone.ApplyMove(rot);
 
